@@ -1,0 +1,16 @@
+server:
+  port: 30000
+
+spring:
+  application:
+    name: eureka-client
+
+eureka:
+  instance:
+    #每隔5秒向服务中心发送一条续约命令
+    lease-renewal-interval-in-seconds: 5
+    #如果30秒内，依然没有收集到续约请求，判断服务过期
+    lease-expiration-duration-in-seconds: 30
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:20001/eureka/,http://localhost:20002/eureka/
