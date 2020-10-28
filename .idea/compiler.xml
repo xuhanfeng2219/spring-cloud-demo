@@ -10,6 +10,7 @@
         <module name="eureka-server" />
         <module name="eureka-server-peer2" />
         <module name="eureka-consumer" />
+        <module name="config-bus-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
