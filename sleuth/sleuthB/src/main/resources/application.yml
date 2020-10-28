@@ -1,0 +1,37 @@
+server:
+  port: 20004
+
+spring:
+  application:
+    name: sleuthB
+  sleuth:
+    sampler:
+      probability: 1
+    #zipkin的地址
+  zipkin:
+    base-url: http://localhost:30000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:20000/eureka
+
+info:
+  app:
+    name: sleuthB
+    description: test
+
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  file: ${spring.application.name}.log
+

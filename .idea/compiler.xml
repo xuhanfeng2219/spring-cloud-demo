@@ -6,11 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="eureka-client" />
-        <module name="eureka-server" />
-        <module name="eureka-server-peer2" />
-        <module name="eureka-consumer" />
         <module name="config-bus-server" />
+        <module name="eureka-server" />
+        <module name="eureka-client" />
+        <module name="zipkin-server" />
+        <module name="eureka-consumer" />
+        <module name="eureka-server-peer2" />
+        <module name="sleuthB" />
+        <module name="sleuthA" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
