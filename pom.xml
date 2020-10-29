@@ -17,6 +17,7 @@
         <module>sleuth/sleuthA</module>
         <module>sleuth/sleuthB</module>
         <module>sleuth/zipkin-server</module>
+        <module>stream/stream-service</module>
     </modules>
 
     <dependencyManagement>

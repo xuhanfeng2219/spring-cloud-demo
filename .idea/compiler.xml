@@ -12,6 +12,7 @@
         <module name="zipkin-server" />
         <module name="eureka-consumer" />
         <module name="eureka-server-peer2" />
+        <module name="stream-service" />
         <module name="sleuthB" />
         <module name="sleuthA" />
       </profile>
