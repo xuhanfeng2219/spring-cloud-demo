@@ -11,10 +11,18 @@ spring:
     stream:
       #延迟队列
       rabbit:
+        #默认全局开启requeue
+#        listener:
+#          defalut-requeue-rejected: true
         bindings:
           delayed-producer:
             producer:
               delayed-exchange: true
+          #仅仅对当前的requeue-consumer，开启requeue
+          requeue-consumer:
+            group: requeue-group
+            consumer:
+              requeueRejected: true
       #当前消费者的实例总量
       instanceCount: 2
       #最大值instanceCount-1，当前实例的索引号
@@ -49,11 +57,17 @@ spring:
         error-consumer:
           destination: error-out-topic
           consumer:
+            #重试次数
             #次数等于1表示不重试
-            max-attempts: 2
+            max-attempts: 1 #1是避免跟requeue的重试冲突
         error-producer:
           destination: error-out-topic
-        #重试次数
+        # requeue重试
+        requeue-consumer:
+          destination: requeue-topic
+        requeue-producer:
+          destination: requeue-topic
+
 server:
   port: 60000
 

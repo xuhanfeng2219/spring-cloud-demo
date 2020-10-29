@@ -1,9 +1,6 @@
 package com.imooc.springcloud.biz;
 
-import com.imooc.springcloud.topics.DelayedTopic;
-import com.imooc.springcloud.topics.ErrorTopic;
-import com.imooc.springcloud.topics.GroupTopic;
-import com.imooc.springcloud.topics.MyTopic;
+import com.imooc.springcloud.topics.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
@@ -30,6 +27,9 @@ public class Controller {
     @Autowired
     private ErrorTopic errorProducer;
 
+    @Autowired
+    private RequeueTopic requeueProducer;
+
     @PostMapping("/send")
     public void sendMsg(@RequestParam("body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
@@ -49,6 +49,17 @@ public class Controller {
         MessageBean bean = new MessageBean();
         bean.setPayload(body);
         errorProducer.output().send(MessageBuilder.withPayload(bean).build());
+    }
+
+    /**
+     * 单机版重试
+     * @param body body
+     */
+    @PostMapping("/send-requeue")
+    public void sendMsgRequeue(@RequestParam("body") String body) {
+        MessageBean bean = new MessageBean();
+        bean.setPayload(body);
+        requeueProducer.output().send(MessageBuilder.withPayload(bean).build());
     }
 
     @PostMapping("/send-dm")
