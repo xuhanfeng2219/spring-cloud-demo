@@ -1,5 +1,6 @@
 package com.imooc.springcloud.biz;
 
+import com.imooc.springcloud.topics.DelayedTopic;
 import com.imooc.springcloud.topics.GroupTopic;
 import com.imooc.springcloud.topics.MyTopic;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,8 @@ import org.springframework.cloud.stream.messaging.Sink;
 @EnableBinding(value = {
         Sink.class,
         MyTopic.class,
-        GroupTopic.class
+        GroupTopic.class,
+        DelayedTopic.class
         //my_topic.class
 })
 public class StreamConsumer {
@@ -32,5 +34,10 @@ public class StreamConsumer {
     @StreamListener(GroupTopic.INPUT)
     public void consumerGroupTopic(Object payload) {
         log.info("group topic message consumed successfully, payload={}", payload);
+    }
+
+    @StreamListener(DelayedTopic.INPUT)
+    public void consumerDelayTopic(MessageBean messageBean) {
+        log.info("delay topic message consumed successfully, payload={}", messageBean.getPayload());
     }
 }

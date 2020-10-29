@@ -9,6 +9,12 @@ spring:
     password: guest
   cloud:
     stream:
+      #延迟队列
+      rabbit:
+        bindings:
+          delayed-producer:
+            producer:
+              delayed-exchange: true
       #当前消费者的实例总量
       instanceCount: 2
       #最大值instanceCount-1，当前实例的索引号
@@ -21,20 +27,24 @@ spring:
           destination: broadcast
         #消息分组
         GroupTopicConsumer:
-          destination: broadcast
+          destination: group-topic
           group: groupA
           #打开分区功能
           cosumer:
             partitioned: true
         GroupTopicProducer:
-          destination: broadcast
+          destination: group-topic
           producer:
             #两个消费分区
             partition-count: 2
             # spel表达式（key resolver）
             #只有索引参数为1的节点（消费者 ），才能消费消息
             partition-key-expression: 1
-
+        #延迟消息配置
+        delayed-consumer:
+          destination: delayed-topic
+        delayed-producer:
+          destination: delayed-topic
 server:
   port: 60000
 
