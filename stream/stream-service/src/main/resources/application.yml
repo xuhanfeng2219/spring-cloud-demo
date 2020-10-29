@@ -15,6 +15,11 @@ spring:
 #        listener:
 #          defalut-requeue-rejected: true
         bindings:
+          #死信队列配置
+          dlq-consumer:
+            consumer:
+              #开启死信队列（默认topic.dlq）
+              auto-bind-dlq: true
           delayed-producer:
             producer:
               delayed-exchange: true
@@ -67,6 +72,14 @@ spring:
           destination: requeue-topic
         requeue-producer:
           destination: requeue-topic
+        #死信队列配置
+        dlq-consumer:
+          destination: dlq-topic
+          group: dlq-group
+          consumer:
+            max-attempts: 2
+        dlq-producer:
+          destination: dlq-topic
 
 server:
   port: 60000

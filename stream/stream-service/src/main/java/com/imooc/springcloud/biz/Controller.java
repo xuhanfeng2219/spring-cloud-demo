@@ -30,6 +30,9 @@ public class Controller {
     @Autowired
     private RequeueTopic requeueProducer;
 
+    @Autowired
+    private DlqTopic dlqProducer;
+
     @PostMapping("/send")
     public void sendMsg(@RequestParam("body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
@@ -51,15 +54,18 @@ public class Controller {
         errorProducer.output().send(MessageBuilder.withPayload(bean).build());
     }
 
-    /**
-     * 单机版重试
-     * @param body body
-     */
     @PostMapping("/send-requeue")
     public void sendMsgRequeue(@RequestParam("body") String body) {
         MessageBean bean = new MessageBean();
         bean.setPayload(body);
         requeueProducer.output().send(MessageBuilder.withPayload(bean).build());
+    }
+
+    @PostMapping("/send-dlq")
+    public void sendMsgDlq(@RequestParam("body") String body) {
+        MessageBean bean = new MessageBean();
+        bean.setPayload(body);
+        dlqProducer.output().send(MessageBuilder.withPayload(bean).build());
     }
 
     @PostMapping("/send-dm")

@@ -18,7 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         GroupTopic.class,
         DelayedTopic.class,
         ErrorTopic.class,
-        RequeueTopic.class
+        RequeueTopic.class,
+        DlqTopic.class
         //my_topic.class
 })
 public class StreamConsumer {
@@ -41,6 +42,19 @@ public class StreamConsumer {
     @StreamListener(DelayedTopic.INPUT)
     public void consumerDelayTopic(MessageBean messageBean) {
         log.info("delay topic message consumed successfully, payload={}", messageBean.getPayload());
+    }
+
+    @StreamListener(DlqTopic.INPUT)
+    public void consumerDlqTopic(MessageBean messageBean) {
+        log.info("are you ok dlq");
+        if (count.incrementAndGet() % 3 == 0) {
+            log.info("dlq fine thank you and you?");
+        } else {
+            log.error("what's you problem dlq");
+            throw new RuntimeException("im not ok dlq");
+        }
+
+        log.info("dlq topic message consumed successfully, payload={}", messageBean.getPayload());
     }
 
     @StreamListener(RequeueTopic.INPUT)
