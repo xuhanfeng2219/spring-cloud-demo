@@ -1,5 +1,6 @@
 package com.imooc.springcloud.biz;
 
+import com.imooc.springcloud.topics.MyTopic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -10,7 +11,8 @@ import org.springframework.cloud.stream.messaging.Sink;
  */
 @Slf4j
 @EnableBinding(value = {
-        Sink.class
+        Sink.class,
+        MyTopic.class
         //my_topic.class
 })
 public class StreamConsumer {
@@ -18,5 +20,10 @@ public class StreamConsumer {
     @StreamListener(Sink.INPUT)
     public void consumer(Object payload) {
         log.info("message consumed successfully, payload={}", payload);
+    }
+
+    @StreamListener(MyTopic.INPUT)
+    public void consumerMyTopic(Object payload) {
+        log.info("my topic message consumed successfully, payload={}", payload);
     }
 }

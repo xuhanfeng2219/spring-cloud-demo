@@ -7,7 +7,14 @@ spring:
     port: 5672
     username: guest
     password: guest
-
+  cloud:
+    stream:
+      bindings:
+        #绑定channel到broadcast
+        myTopicConsumer:
+          destination: broadcast
+        myTopicProducer:
+          destination: broadcast
 server:
   port: 60000
 
