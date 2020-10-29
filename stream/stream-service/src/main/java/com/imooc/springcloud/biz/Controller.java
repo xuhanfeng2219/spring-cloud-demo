@@ -1,6 +1,7 @@
 package com.imooc.springcloud.biz;
 
 import com.imooc.springcloud.topics.DelayedTopic;
+import com.imooc.springcloud.topics.ErrorTopic;
 import com.imooc.springcloud.topics.GroupTopic;
 import com.imooc.springcloud.topics.MyTopic;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class Controller {
     @Autowired
     private GroupTopic groupProducer;
 
+    @Autowired
+    private ErrorTopic errorProducer;
+
     @PostMapping("/send")
     public void sendMsg(@RequestParam("body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
@@ -34,6 +38,17 @@ public class Controller {
     @PostMapping("/send-group")
     public void sendMsgGroup(@RequestParam("body") String body) {
         groupProducer.output().send(MessageBuilder.withPayload(body).build());
+    }
+
+    /**
+     * 单机版重试
+     * @param body body
+     */
+    @PostMapping("/send-error")
+    public void sendMsgError(@RequestParam("body") String body) {
+        MessageBean bean = new MessageBean();
+        bean.setPayload(body);
+        errorProducer.output().send(MessageBuilder.withPayload(bean).build());
     }
 
     @PostMapping("/send-dm")

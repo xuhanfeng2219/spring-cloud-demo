@@ -45,6 +45,15 @@ spring:
           destination: delayed-topic
         delayed-producer:
           destination: delayed-topic
+        #异常重试单机消息配置
+        error-consumer:
+          destination: error-out-topic
+          consumer:
+            #次数等于1表示不重试
+            max-attempts: 2
+        error-producer:
+          destination: error-out-topic
+        #重试次数
 server:
   port: 60000
 
