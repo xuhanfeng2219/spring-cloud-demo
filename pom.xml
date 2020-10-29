@@ -13,7 +13,7 @@
         <module>eureka/eureka-client</module>
         <module>eureka/eureka-consumer</module>
         <module>eureka/eureka-server-peer2</module>
-        <module>config-bus-server</module>
+        <module>bus/config-bus-server</module>
         <module>sleuth/sleuthA</module>
         <module>sleuth/sleuthB</module>
         <module>sleuth/zipkin-server</module>
