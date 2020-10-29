@@ -32,7 +32,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass></mainClass>
+                    <mainClass>com.imooc.springcloud.ZipkinApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
