@@ -33,6 +33,9 @@ public class Controller {
     @Autowired
     private DlqTopic dlqProducer;
 
+    @Autowired
+    private FallbackTopic fallbackProducer;
+
     @PostMapping("/send")
     public void sendMsg(@RequestParam("body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
@@ -45,6 +48,7 @@ public class Controller {
 
     /**
      * 单机版重试
+     *
      * @param body body
      */
     @PostMapping("/send-error")
@@ -77,5 +81,19 @@ public class Controller {
                 .send(MessageBuilder.withPayload(body)
                         .setHeader("x-delay", 1000 * seconds)
                         .build());
+    }
+
+    @PostMapping("/send-fallback")
+    public void sendMsgFallback(@RequestParam("body") String body,
+                                @RequestParam(value = "version", defaultValue = "1.0") String version) {
+        MessageBean bean = new MessageBean();
+        bean.setPayload(body);
+        fallbackProducer.output()
+                // place order
+                .send(
+                        MessageBuilder.withPayload(bean)
+                                .setHeader("version", version)
+                                .build()
+                );
     }
 }

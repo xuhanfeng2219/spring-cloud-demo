@@ -80,6 +80,15 @@ spring:
             max-attempts: 2
         dlq-producer:
           destination: dlq-topic
+        #降级的配置
+        fallback-consumer:
+          destination: fallback-topic
+          group: fallback-group
+          consumer:
+            max-attempts: 2
+        fallback-producer:
+          destination: fallback-topic
+        # input channel: fallback-topic.fallback-group.errors
 
 server:
   port: 60000

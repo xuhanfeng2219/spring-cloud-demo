@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.Header;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,7 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
         DelayedTopic.class,
         ErrorTopic.class,
         RequeueTopic.class,
-        DlqTopic.class
+        DlqTopic.class,
+        FallbackTopic.class
         //my_topic.class
 })
 public class StreamConsumer {
@@ -63,7 +67,7 @@ public class StreamConsumer {
         try {
             Thread.sleep(3000);
         } catch (Exception e) {
-            log.error("重试报错！",e);
+            log.error("重试报错！", e);
         }
         throw new RuntimeException("im not ok");
     }
@@ -72,6 +76,7 @@ public class StreamConsumer {
 
     /**
      * 异常重试单机版
+     *
      * @param messageBean bean
      */
     @StreamListener(ErrorTopic.INPUT)
@@ -85,5 +90,25 @@ public class StreamConsumer {
             throw new RuntimeException("im not ok");
         }
         log.info("error topic message consumed successfully, payload={}", messageBean.getPayload());
+    }
+
+    @StreamListener(FallbackTopic.INPUT)
+    public void consumerFallbackTopic(MessageBean messageBean, @Header("version") String version) {
+        log.info("are you ok Fallback");
+        if ("1.0".equalsIgnoreCase(version)) {
+            log.info("Fallback fine thank you and you?");
+        } else if ("2.0".equalsIgnoreCase(version)){
+            log.error("what's you problem Fallback");
+            throw new RuntimeException("im not ok Fallback");
+        } else {
+            log.info("fallback version={}", version);
+        }
+
+        log.info("Fallback topic message consumed successfully, payload={}", messageBean.getPayload());
+    }
+
+    @ServiceActivator(inputChannel = "fallback-topic.fallback-group.errors")
+    public void fallback (Message<?> message) {
+        log.info("fallback entered ");
     }
 }
