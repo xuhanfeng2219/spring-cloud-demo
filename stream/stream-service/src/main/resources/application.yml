@@ -9,12 +9,32 @@ spring:
     password: guest
   cloud:
     stream:
+      #当前消费者的实例总量
+      instanceCount: 2
+      #最大值instanceCount-1，当前实例的索引号
+      instanceIndex: 0
       bindings:
         #绑定channel到broadcast
         myTopicConsumer:
           destination: broadcast
         myTopicProducer:
           destination: broadcast
+        #消息分组
+        GroupTopicConsumer:
+          destination: broadcast
+          group: groupA
+          #打开分区功能
+          cosumer:
+            partitioned: true
+        GroupTopicProducer:
+          destination: broadcast
+          producer:
+            #两个消费分区
+            partition-count: 2
+            # spel表达式（key resolver）
+            #只有索引参数为1的节点（消费者 ），才能消费消息
+            partition-key-expression: 1
+
 server:
   port: 60000
 

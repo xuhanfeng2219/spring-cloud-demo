@@ -1,5 +1,6 @@
 package com.imooc.springcloud.biz;
 
+import com.imooc.springcloud.topics.GroupTopic;
 import com.imooc.springcloud.topics.MyTopic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,16 @@ public class Controller {
     @Autowired
     private MyTopic producer;
 
+    @Autowired
+    private GroupTopic groupProducer;
+
     @PostMapping("/send")
     public void sendMsg(@RequestParam("body") String body) {
         producer.output().send(MessageBuilder.withPayload(body).build());
+    }
+
+    @PostMapping("/send-group")
+    public void sendMsgGroup(@RequestParam("body") String body) {
+        groupProducer.output().send(MessageBuilder.withPayload(body).build());
     }
 }
